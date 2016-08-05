@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(uvc_ros_driver)
 
-# if traget is an ARM processor uncomment this line to compile with NEON instruction
-# set(NEON_FLAGS "-DENABLE_NEON -mfloat-abi=hard -mfpu=neon-vfpv4 -mcpu=cortex-a15 -Ofast")
-set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS} -Wno-format-security ${NEON_FLAGS}")
+set(NEON_FLAGS "-DENABLE_NEON -mfloat-abi=hard -mfpu=neon -mcpu=cortex-a15 -Ofast")
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -Wno-format-security ${NEON_FLAGS}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NEON_FLAGS}")
 
 ## Find catkin macros and libraries
@@ -110,7 +109,7 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -Wall -std=c++0x -D__STRICT_ANSI__")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -D__STRICT_ANSI__")
 
 catkin_package(
   INCLUDE_DIRS include
