@@ -60,7 +60,7 @@ static bool myPairMax(std::pair<int, int> p, std::pair<int, int> p1)
 uvcROSDriver::~uvcROSDriver()
 {
 	setParam("CAMERA_ENABLE", 0.0f);
-	sleep(1.0); 
+	sleep(5.0);
 	uvc_stop_streaming(devh_);
 	// close serial port
 	sp_.close_serial();
@@ -89,6 +89,7 @@ void uvcROSDriver::initDevice()
 		sp_ = Serial_Port("/dev/serial/by-id/usb-Cypress_FX3-if03-port0", 115200);
 		sp_.open_serial();
 	}
+
 	if (enable_ait_vio_msg_) {
 		// initialize vio msgs publishers
 		switch (n_cameras_) {
@@ -221,14 +222,17 @@ void uvcROSDriver::startDevice()
 		past_ = ros::Time::now();
 		start_offset_ = ros::Time::now();
 		res = uvc_start_streaming(devh_, &ctrl_, &callback, this, 0);
-		if (res != UVC_SUCCESS) {
-			ROS_ERROR("Unable to start stream");
-			// TODO: restart node if streaming fails?
-			ros::shutdown();
-			return;
-		}
 		setParam("CAMERA_ENABLE", float(camera_config_));
-		ROS_INFO("Starting stream ...");
+
+		while (!uvc_cb_flag_ && ros::ok()) {
+			printf("retry start streaming...\n");
+			sleep(1.0);
+			uvc_stop_streaming(devh_);
+			sleep(1.0);
+			res = uvc_start_streaming(devh_, &ctrl_, &callback, this, 0);
+			usleep(200000);
+			// std::cout << "res: " << res << std::endl;
+		}
 
 	} else {
 		ROS_ERROR("Device not initialized!");
@@ -447,7 +451,7 @@ void uvcROSDriver::setCalibration(CameraParameters camParams)
 		// disparity L->R occlusion in px
 		setParam("STEREO_LR_CAM1", 4.0f);
 		// threshold 0-255 valid disparity
-		setParam("STEREO_TH_CAM1", 100.0f);
+		setParam("STEREO_TH_CAM1", 40.0f);
 
 		setParam("STEREO_P1_CAM3", 8.0f);
 		setParam("STEREO_P2_CAM3", 240.0f);
@@ -507,7 +511,7 @@ uvc_error_t uvcROSDriver::initAndOpenUvc()
 
 	/* Locates the first attached UVC device, stores in dev */
 	/* filter devices: vendor_id, product_id, "serial_num" */
-	res = uvc_find_device(ctx_, &dev_, 0x04b4, 0x00f8, NULL);
+	res = uvc_find_device(ctx_, &dev_, 0x04b4, 0, NULL);
 
 	if (res < 0) {
 		uvc_perror(res, "uvc_find_device"); /* no devices found */
@@ -789,7 +793,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 				msg_imu.angular_velocity.z = -gyr_z;
 			}
 
-			msg_imu.header.stamp = fpga_line_time;
+			// msg_imu.header.stamp = fpga_line_time;
+			msg_imu.header.stamp = ros::Time::now();
 
 			msg_vio.imu.push_back(msg_imu);
 
@@ -802,12 +807,14 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 	ros::Duration elapsed = fpga_frame_time - past_;
 	past_ = fpga_frame_time;
 
-	printf("camera id: %d   ", cam_id);
-	printf("timestamp fpga: %f   ", fpga_frame_time.toSec() -
-	       start_offset_.toSec() +
-	       time_offset_frame.toSec());
-	printf("framerate: %f   ", 1.0 / elapsed.toSec());
-	printf("%lu imu messages\n", msg_vio.imu.size());
+	if (frameCounter_ % 100 == 0) {
+		printf("camera id: %d   ", cam_id);
+		printf("timestamp fpga: %f   ", fpga_frame_time.toSec() -
+		       start_offset_.toSec() +
+		       time_offset_frame.toSec());
+		printf("framerate: %f   ", 1.0 / elapsed.toSec());
+		printf("%lu imu messages\n", msg_vio.imu.size());
+	}
 
 	// temp container for the 2 images
 	uint8_t left[(frame_size - 16 * 2 * frame->height) / 2];
@@ -823,7 +830,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 			       frame->width - 16,  // stepSize
 			       left);
 
-	msg_vio.left_image.header.stamp = fpga_frame_time;
+	// msg_vio.left_image.header.stamp = fpga_frame_time;
+	msg_vio.left_image.header.stamp = ros::Time::now();
 
 	sensor_msgs::fillImage(msg_vio.right_image,
 			       sensor_msgs::image_encodings::MONO8,
@@ -832,11 +840,13 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 			       frame->width - 16,  // stepSize
 			       right);
 
-	msg_vio.right_image.header.stamp = fpga_frame_time;
+	// msg_vio.right_image.header.stamp = fpga_frame_time;
+	msg_vio.right_image.header.stamp = ros::Time::now();
 
 	// publish data
 	if (cam_id == 0) {  // select_cam = 0 + 1
 		frame_time_ = fpga_frame_time;
+		frame_time_ = ros::Time::now();
 		frameCounter_++;
 		// set frame_id on images and on msg_vio
 		msg_vio.header.stamp = frame_time_;
