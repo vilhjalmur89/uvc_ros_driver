@@ -113,101 +113,65 @@ void uvcROSDriver::initDevice()
 	// initialize camera image publisher
 	switch (n_cameras_) {
 	case 10:
-		cam_9_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_9/image_raw", 5);
-		cam_9_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_9/camera_info", 5);
+		cam_9_pub_.advertise(node_name_ + "/cam_9/image_raw", &nh_);
+		cam_9_info_pub_.advertise(node_name_ + "/cam_9/camera_info", &nh_);
 
 	case 9:
-		cam_8_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_8/image_raw", 5);
-		cam_8_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_8/camera_info", 5);
+		cam_8_pub_.advertise(node_name_ + "/cam_8/image_raw", &nh_);
+		cam_8_info_pub_.advertise(node_name_ + "/cam_8/camera_info", &nh_);
 
 	case 8:
-		cam_7_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_7/image_raw", 5);
-		cam_7_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_7/camera_info", 5);
-		cam_6c_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_6/image_rect", 5);
-		cam_6c_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_6/camera_info", 5);
-		cam_6d_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_6/image_depth", 5);
-		cam_6d_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_6/camera_info", 5);
+		cam_7_pub_.advertise(node_name_ + "/cam_7/image_raw", &nh_);
+		cam_7_info_pub_.advertise(node_name_ + "/cam_7/camera_info", &nh_);
+		cam_6c_pub_.advertise(node_name_ + "/cam_6/image_rect", &nh_);
+		cam_6c_info_pub_.advertise(node_name_ + "/cam_6/camera_info", &nh_);
+		cam_6d_pub_.advertise(node_name_ + "/cam_6/image_depth", &nh_);
+		cam_6d_info_pub_.advertise(node_name_ + "/cam_6/camera_info", &nh_);
 
 	case 7:
-		cam_6_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_6/image_raw", 5);
-		cam_6_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_6/camera_info", 5);
+		cam_6_pub_.advertise(node_name_ + "/cam_6/image_raw", &nh_);
+		cam_6_info_pub_.advertise(node_name_ + "/cam_6/camera_info", &nh_);
 
 	case 6:
-		cam_5_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_5/image_raw", 5);
-		cam_5_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_5/camera_info", 5);
-		cam_4c_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_4/image_rect", 5);
-		cam_4c_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_4/camera_info", 5);
-		cam_4d_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_4/image_depth", 5);
-		cam_4d_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_4/camera_info", 5);
+		cam_5_pub_.advertise(node_name_ + "/cam_5/image_raw", &nh_);
+		cam_5_info_pub_.advertise(node_name_ + "/cam_5/camera_info", &nh_);
+		cam_4c_pub_.advertise(node_name_ + "/cam_4/image_rect", &nh_);
+		cam_4c_info_pub_.advertise(node_name_ + "/cam_4/camera_info", &nh_);
+		cam_4d_pub_.advertise(node_name_ + "/cam_4/image_depth", &nh_);
+		cam_4d_info_pub_.advertise(node_name_ + "/cam_4/camera_info", &nh_);
 
 	case 5:
-		cam_4_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_4/image_raw", 5);
-		cam_4_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_4/camera_info", 5);
+		cam_4_pub_.advertise(node_name_ + "/cam_4/image_raw", &nh_);
+		cam_4_info_pub_.advertise(node_name_ + "/cam_4/camera_info", &nh_);
 
 	case 4:
-		cam_3_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_3/image_raw", 5);
-		cam_3_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_3/camera_info", 5);
-		cam_2c_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_2/image_rect", 5);
-		cam_2c_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_2/camera_info", 5);
-		cam_2d_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_2/image_depth", 5);
-		cam_2d_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_2/camera_info", 5);
+		cam_3_pub_.advertise(node_name_ + "/cam_3/image_raw", &nh_);
+		cam_3_info_pub_.advertise(node_name_ + "/cam_3/camera_info", &nh_);
+		cam_2c_pub_.advertise(node_name_ + "/cam_2/image_rect", &nh_);
+		cam_2c_info_pub_.advertise(node_name_ + "/cam_2/camera_info", &nh_);
+		cam_2d_pub_.advertise(node_name_ + "/cam_2/image_depth", &nh_);
+		cam_2d_info_pub_.advertise(node_name_ + "/cam_2/camera_info", &nh_);
 
 	case 3:
-		cam_2_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_2/image_raw", 5);
-		cam_2_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_2/camera_info", 5);
+		cam_2_pub_.advertise(node_name_ + "/cam_2/image_raw", &nh_);
+		cam_2_info_pub_.advertise(node_name_ + "/cam_2/camera_info", &nh_);
 
 	case 2:
-		cam_1_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_1/image_raw", 5);
-		cam_1_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_1/camera_info", 5);
-		cam_0c_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_0/image_rect", 5);
-		cam_0c_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_0/camera_info", 5);
-		cam_0d_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_0/image_depth", 5);
-		cam_0d_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_0/camera_info", 5);
+		cam_1_pub_.advertise(node_name_ + "/cam_1/image_raw", &nh_);
+		cam_1_info_pub_.advertise(node_name_ + "/cam_1/camera_info", &nh_);
+		cam_0c_pub_.advertise(node_name_ + "/cam_0/image_rect", &nh_);
+		cam_0c_info_pub_.advertise(node_name_ + "/cam_0/camera_info", &nh_);
+		cam_0d_pub_.advertise(node_name_ + "/cam_0/image_depth", &nh_);
+		cam_0d_info_pub_.advertise(node_name_ + "/cam_0/camera_info", &nh_);
 
 	default:
-		cam_0_pub_ = nh_.advertise<sensor_msgs::Image>(
-				     node_name_ + "/cam_0/image_raw", 5);
-		cam_0_info_pub_ = nh_.advertise<sensor_msgs::CameraInfo>(
-					  node_name_ + "/cam_0/camera_info", 5);
+		cam_0_pub_.advertise(node_name_ + "/cam_0/image_raw", &nh_);
+		cam_0_info_pub_.advertise(node_name_ + "/cam_0/camera_info", &nh_);
 	}
 
 	// initialize imu msg publisher
-	imu0_publisher_ = nh_.advertise<sensor_msgs::Imu>("/cam_0_imu", 20);
-	imu1_publisher_ = nh_.advertise<sensor_msgs::Imu>("/cam_1_imu", 20);
+	imu0_publisher_.advertise("/cam_0_imu", &nh_);
+	imu1_publisher_.advertise("/cam_1_imu", &nh_);
 	// wait on heart beat
 	std::cout << "Waiting on device.";
 	fflush(stdout);
@@ -247,8 +211,8 @@ void uvcROSDriver::startDevice()
 		// open uvc stream
 		uvc_error_t res = initAndOpenUvc();
 		// start stream
-		past_ = ros::Time::now();
-		start_offset_ = ros::Time::now();
+		past_ = RosAPI::timeNow();
+		start_offset_ = RosAPI::timeNow();
 		res = uvc_start_streaming(devh_, &ctrl_, &callback, this, 0);
 			//mavlink_param_value_t param;
 			//bool wait=1;
@@ -282,7 +246,7 @@ void uvcROSDriver::startDevice()
 
 			//printf(" done\n");
 		printf("Waiting on stream");
-		while (!uvc_cb_flag_ && ros::ok()) {
+		while (!uvc_cb_flag_ && RosAPI::ok()) {
 			printf(".");
 			fflush(stdout);
 			//uvc_stop_streaming(devh_);
@@ -738,7 +702,7 @@ inline void uvcROSDriver::deinterleave(const uint8_t *mixed, uint8_t *array1,
 void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 {
 	// check if evrytstartedhing ok
-	if (!ros::ok()) {
+	if (!RosAPI::ok()) {
 		return;
 	}
 
@@ -750,11 +714,11 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 	uvc_cb_flag_ = true;
 
 	// delay from exposure to readout of 1st line is 9ms
-	static ros::Duration time_offset_frame(0.041);
+	static RosAPI::Duration time_offset_frame(0.041);
 
-	static ros::Time fpga_frame_time = start_offset_ - time_offset_frame;
-	static ros::Time fpga_line_time = start_offset_;
-	ros::Duration fpga_time_add(0.0);
+	static RosAPI::Time fpga_frame_time = start_offset_ - time_offset_frame;
+	static RosAPI::Time fpga_line_time = start_offset_;
+	RosAPI::Duration fpga_time_add(0.0);
 
 	ait_ros_messages::VioSensorMsg msg_vio;
 	sensor_msgs::Imu msg_imu;
@@ -783,7 +747,7 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		(((uint32_t)(timestamp_upper)) << 16) + (uint32_t)(timestamp_lower);
 
 	// wrap around is automatically handled by underflow of uint16_t values
-	fpga_time_add = ros::Duration(
+	fpga_time_add = RosAPI::Duration(
 				(double(timestamp - time_wrapper_check_frame_)) / 1000000.0);
 	time_wrapper_check_frame_ = timestamp;
 
@@ -792,7 +756,7 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 	fpga_frame_time = fpga_frame_time + fpga_time_add;
 
 	unsigned int imu_msg_counter_in_frame = 0;
-	ros::Time timestamp_second_imu_msg_in_frame;
+	RosAPI::Time timestamp_second_imu_msg_in_frame;
 
 	for (unsigned i = 0; i < frame->height; i++) {
 
@@ -857,7 +821,7 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 
 		// wrap around is automatically handled by underflow of uint16_t values
 		fpga_time_add =
-		    ros::Duration(double(timestamp - time_wrapper_check_line_) / 1000000.0);
+		    RosAPI::Duration(double(timestamp - time_wrapper_check_line_) / 1000000.0);
 		time_wrapper_check_line_ = timestamp;
 
 		// line time is timestamp of current line + offset_start
@@ -866,14 +830,14 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		if(first_imu_received_flag_ == false) {
 		  first_imu_received_flag_ = true;
 		  timestamp_prev_imu_msg_ = fpga_line_time;
-		  imu_dt_ = ros::Duration(0.0);
+		  imu_dt_ = RosAPI::Duration(0.0);
 		}
 
 
 
 		if (!(count == count_prev)) {
 
-			ros::Time imu_timestamp;
+			RosAPI::Time imu_timestamp;
 			if(imu_msg_counter_in_frame > 0)
 			{
 				imu_timestamp = fpga_line_time;
@@ -932,12 +896,12 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 	}
 
 	if(imu_msg_counter_in_frame > 3) {
-		const ros::Duration diff_timestamps_imu = timestamp_prev_imu_msg_ - timestamp_second_imu_msg_in_frame;
+		const RosAPI::Duration diff_timestamps_imu = timestamp_prev_imu_msg_ - timestamp_second_imu_msg_in_frame;
 		imu_dt_.fromSec(diff_timestamps_imu.toSec() / (imu_msg_counter_in_frame - 2));
 	}
 	//std::cout << "total: " << imu_dt_ << " n: " << imu_msg_counter_in_frame << std::endl;
 
-	ros::Duration elapsed = fpga_frame_time - past_;
+	RosAPI::Duration elapsed = fpga_frame_time - past_;
 	past_ = fpga_frame_time;
 
 	ROS_DEBUG("camera id: %d   ", cam_id);

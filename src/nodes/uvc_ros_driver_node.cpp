@@ -68,23 +68,23 @@ CameraParameters loadCustomCameraCalibration(const std::string calib_path)
 
 int main(int argc, char **argv)
 {
-	ros::init(argc, argv, "uvc_camera");
-	ros::NodeHandle nh("~");  // private nodehandle
+	RosAPI::init(argc, argv, "uvc_camera");
+	RosAPI::Node nh("~");  // private nodehandle
 
-	uvc::uvcROSDriver uvc_ros_driver(nh);
+	uvc::uvcROSDriver uvc_ros_driver(nh, "/uvc_ros_driver");
 
 	// get params from launch file
 	bool flip, set_calibration, depth_map, calibration_mode, ait_msgs;
 	int camera_config, number_of_cameras;
 	std::string calibration_file_path;
 	// TODO: check if parameter exist
-	nh.getParam("flip", flip);
-	nh.getParam("numberOfCameras", number_of_cameras);
-	nh.getParam("AITMsgs", ait_msgs);
-	nh.getParam("setCalibration", set_calibration);
-	nh.getParam("depthMap", depth_map);
-	nh.getParam("cameraConfigFile", calibration_file_path);
-	nh.getParam("calibrationMode", calibration_mode);
+	RosAPI::getParamWithDefault(&nh, "flip", flip, false);
+	RosAPI::getParamWithDefault(&nh, "numberOfCameras", number_of_cameras, 0);
+	RosAPI::getParamWithDefault(&nh, "AITMsgs", ait_msgs, false);
+	RosAPI::getParamWithDefault(&nh, "setCalibration", set_calibration, false);
+	RosAPI::getParamWithDefault(&nh, "depthMap", depth_map, false);
+	RosAPI::getParamWithDefault(&nh, "cameraConfigFile", calibration_file_path, std::string(""));
+	RosAPI::getParamWithDefault(&nh, "calibrationMode", calibration_mode, false);
 
 	// read yaml calibration file from device
 	CameraParameters camParams =
@@ -122,6 +122,6 @@ int main(int argc, char **argv)
 	// start device
 	uvc_ros_driver.startDevice();
 	// endless loop
-	ros::spin();
+	RosAPI::spin(nh);
 	return 0;
 }

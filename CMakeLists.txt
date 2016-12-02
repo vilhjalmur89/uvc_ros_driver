@@ -113,7 +113,7 @@ generate_messages(
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -Wall -std=c++0x -D__STRICT_ANSI__")
 
 catkin_package(
-  INCLUDE_DIRS include
+  INCLUDE_DIRS include ros_api/ros1_api/uvc_ros_driver
   LIBRARIES uvc_ros_driver
   CATKIN_DEPENDS roscpp roslib image_transport
 #  DEPENDS system_lib
@@ -131,6 +131,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${Eigen3_INCLUDE_DIRS}
   include
+  ros_api/ros1_api/uvc_ros_driver
   /usr/include/libusb-1.0
   src/nodes/c_library
   src/nodes

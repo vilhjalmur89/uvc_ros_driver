@@ -56,15 +56,7 @@
 
 #include "libuvc/libuvc.h"
 
-#include <ait_ros_messages/VioSensorMsg.h>
-
-#include <ros/ros.h>
-#include <ros/package.h>
-#include <std_msgs/String.h>
-#include <sensor_msgs/Image.h>
-#include <sensor_msgs/CameraInfo.h>
-#include <sensor_msgs/Imu.h>
-#include <sensor_msgs/fill_image.h>
+#include "ros_api.h"
 
 #include <vector>
 #include <utility>  // std::pair
@@ -94,8 +86,8 @@ private:
 	int modulo_ = 1;
 	int calibration_mode_ = 0;
 
-	ros::Duration imu_dt_ = ros::Duration(0.0);
-  ros::Time timestamp_prev_imu_msg_;
+	RosAPI::Duration imu_dt_ = RosAPI::Duration(0.0);
+  	RosAPI::Time timestamp_prev_imu_msg_;
 
 	// TODO: add other camera parameters
 	// float ....
@@ -119,59 +111,59 @@ private:
 	uvc_device_handle_t *devh_;
 	uvc_stream_ctrl_t ctrl_;
 	// ros node handle
-	ros::NodeHandle nh_;
+	RosAPI::Node nh_;
 	// node name
 	std::string node_name_;
 	// time
-	ros::Time past_;
-	ros::Time frame_time_;
-	ros::Time start_offset_;
+	RosAPI::Time past_;
+	RosAPI::Time frame_time_;
+	RosAPI::Time start_offset_;
 	uint32_t time_wrapper_check_frame_ = 0.0;
 	uint32_t time_wrapper_check_line_ = 0.0;
 	// image publishers
-	ros::Publisher cam_0_pub_;
-	ros::Publisher cam_0_info_pub_;
-	ros::Publisher cam_0c_pub_;
-	ros::Publisher cam_0c_info_pub_;
-	ros::Publisher cam_0d_pub_;
-	ros::Publisher cam_0d_info_pub_;
-	ros::Publisher cam_1_pub_;
-	ros::Publisher cam_1_info_pub_;
-	ros::Publisher cam_2_pub_;
-	ros::Publisher cam_2_info_pub_;
-	ros::Publisher cam_2c_pub_;
-	ros::Publisher cam_2c_info_pub_;
-	ros::Publisher cam_2d_pub_;
-	ros::Publisher cam_2d_info_pub_;
-	ros::Publisher cam_3_pub_;
-	ros::Publisher cam_3_info_pub_;
-	ros::Publisher cam_4_pub_;
-	ros::Publisher cam_4_info_pub_;
-	ros::Publisher cam_4c_pub_;
-	ros::Publisher cam_4c_info_pub_;
-	ros::Publisher cam_4d_pub_;
-	ros::Publisher cam_4d_info_pub_;
-	ros::Publisher cam_5_pub_;
-	ros::Publisher cam_5_info_pub_;
-	ros::Publisher cam_6_pub_;
-	ros::Publisher cam_6_info_pub_;
-	ros::Publisher cam_6c_pub_;
-	ros::Publisher cam_6c_info_pub_;
-	ros::Publisher cam_6d_pub_;
-	ros::Publisher cam_6d_info_pub_;
-	ros::Publisher cam_7_pub_;
-	ros::Publisher cam_7_info_pub_;
-	ros::Publisher cam_8_pub_;
-	ros::Publisher cam_8_info_pub_;
-	ros::Publisher cam_8c_pub_;
-	ros::Publisher cam_8c_info_pub_;
-	ros::Publisher cam_8d_pub_;
-	ros::Publisher cam_8d_info_pub_;
-	ros::Publisher cam_9_pub_;
-	ros::Publisher cam_9_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_0_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_0_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_0c_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_0c_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_0d_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_0d_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_1_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_1_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_2_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_2_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_2c_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_2c_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_2d_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_2d_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_3_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_3_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_4_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_4_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_4c_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_4c_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_4d_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_4d_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_5_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_5_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_6_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_6_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_6c_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_6c_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_6d_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_6d_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_7_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_7_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_8_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_8_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_8c_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_8c_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_8d_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_8d_info_pub_;
+	RosAPI::Publisher<sensor_msgs::Image> cam_9_pub_;
+	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_9_info_pub_;
 	// imu publishers
-	ros::Publisher imu0_publisher_;
-	ros::Publisher imu1_publisher_;
+	RosAPI::Publisher<sensor_msgs::Imu> imu0_publisher_;
+	RosAPI::Publisher<sensor_msgs::Imu> imu1_publisher_;
 	// camera info
 	sensor_msgs::CameraInfo info_cam_0_;
 	sensor_msgs::CameraInfo info_cam_1_;
@@ -198,8 +190,8 @@ private:
 	inline void selectCameraInfo(int camera, sensor_msgs::CameraInfo **ci);
 
 public:
-	uvcROSDriver(ros::NodeHandle nh)
-		: nh_(nh), node_name_(ros::this_node::getName()) {};
+	uvcROSDriver(RosAPI::Node nh, std::string node_name)
+		: nh_(nh), node_name_(node_name) {};
 	~uvcROSDriver();
 	void uvc_cb(uvc_frame_t *frame);
 	/**

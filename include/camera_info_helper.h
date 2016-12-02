@@ -2,9 +2,8 @@
 #define __CAMERA_INFO_HELPER_H__
 
 #include "fpga_calibration.h"
-#include <ros/ros.h>
-#include <sensor_msgs/CameraInfo.h>
-#include <sensor_msgs/distortion_models.h>
+#include "ros_api.h"
+
 #include <string>
 
 inline void setCameraInfoIntrinsics(sensor_msgs::CameraInfo &ci, double fx,
