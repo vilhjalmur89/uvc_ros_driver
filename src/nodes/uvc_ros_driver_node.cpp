@@ -47,6 +47,8 @@ CameraParameters loadCustomCameraCalibration(const std::string calib_path)
 
 	// load a camera calibration defined in the launch script
 	try {
+		//wait on inital mount of calib path
+		usleep(2000000);
 		YAML::Node YamlNode = YAML::LoadFile(calib_path);
 
 		if (YamlNode.IsNull()) {
@@ -66,37 +68,37 @@ CameraParameters loadCustomCameraCalibration(const std::string calib_path)
 
 int main(int argc, char **argv)
 {
-	ros::init(argc, argv, "uvc_camera");
-	ros::NodeHandle nh("~");  // private nodehandle
+	RosAPI::init(argc, argv, "uvc_camera");
 
-	uvc::uvcROSDriver uvc_ros_driver(nh);
+	auto nh = std::make_shared<RosAPI::Node>("~");
+	uvc::uvcROSDriver uvc_ros_driver(nh.get(), "/uvc_ros_driver");
 
 	// get params from launch file
 	bool flip, set_calibration, depth_map, calibration_mode, ait_msgs;
 	int camera_config, number_of_cameras;
 	std::string calibration_file_path;
 	// TODO: check if parameter exist
-	nh.getParam("flip", flip);
-	nh.getParam("numberOfCameras", number_of_cameras);
-	nh.getParam("AITMsgs", ait_msgs);
-	nh.getParam("setCalibration", set_calibration);
-	nh.getParam("depthMap", depth_map);
-	nh.getParam("cameraConfigFile", calibration_file_path);
-	nh.getParam("calibrationMode", calibration_mode);
+	RosAPI::getParamWithDefault(nh.get(), "flip", flip, false);
+	RosAPI::getParamWithDefault(nh.get(), "numberOfCameras", number_of_cameras, 0);
+	RosAPI::getParamWithDefault(nh.get(), "AITMsgs", ait_msgs, false);
+	RosAPI::getParamWithDefault(nh.get(), "setCalibration", set_calibration, false);
+	RosAPI::getParamWithDefault(nh.get(), "depthMap", depth_map, false);
+	RosAPI::getParamWithDefault(nh.get(), "cameraConfigFile", calibration_file_path, std::string(""));
+	RosAPI::getParamWithDefault(nh.get(), "calibrationMode", calibration_mode, false);
 
 	// read yaml calibration file from device
 	CameraParameters camParams =
 		loadCustomCameraCalibration(calibration_file_path);
 
-	std::vector<std::pair<int, int>> homography_mapping;
-	// import homograpy mapping from yaml file
-	XmlRpc::XmlRpcValue homography_import;
-	nh.param("homography_mapping", homography_import, homography_import);
+	std::vector<std::pair<int, int>> homography_mapping = {std::make_pair(0, 1)};
+	// // import homograpy mapping from yaml file
+	// XmlRpc::XmlRpcValue homography_import;
+	// nh.param("homography_mapping", homography_import, homography_import);
 
-	for (int i = 0; i < homography_import.size(); i++) {
-		homography_mapping.push_back(std::make_pair((int)homography_import[i][0],
-					     (int)homography_import[i][1]));
-	}
+	// for (int i = 0; i < homography_import.size(); i++) {
+	// 	homography_mapping.push_back(std::make_pair((int)homography_import[i][0],
+	// 				     (int)homography_import[i][1]));
+	// }
 
 	// set parameter
 	uvc_ros_driver.setNumberOfCameras(number_of_cameras);
@@ -120,6 +122,6 @@ int main(int argc, char **argv)
 	// start device
 	uvc_ros_driver.startDevice();
 	// endless loop
-	ros::spin();
+	RosAPI::spin(nh);
 	return 0;
 }

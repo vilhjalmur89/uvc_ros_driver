@@ -3,7 +3,6 @@
 
 #ifdef CATKIN_BUILD
 
-#include <ros/console.h>
 #define INFO ROS_INFO
 #define WARN ROS_WARN
 #define ERROR ROS_ERROR
