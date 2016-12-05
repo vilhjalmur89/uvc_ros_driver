@@ -36,6 +36,17 @@ add_definitions(${EIGEN3_DEFINITIONS})
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -Wall -std=c++0x -D__STRICT_ANSI__")
 
+catkin_package(
+  INCLUDE_DIRS include ros_api/ros1_api/uvc_ros_driver
+  LIBRARIES uvc_ros_driver
+  CATKIN_DEPENDS roscpp roslib image_transport
+#  DEPENDS system_lib
+  DEPENDS yaml-cpp
+)
+
+###########
+## Build ##
+###########
 
 include_directories(
   include

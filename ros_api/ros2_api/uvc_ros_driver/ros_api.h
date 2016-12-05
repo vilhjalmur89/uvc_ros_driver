@@ -192,7 +192,6 @@ class Publisher {
 
 }
 
-
 inline RosAPI::Duration operator+(const RosAPI::Duration & lhs, const RosAPI::Duration & rhs) {
   RosAPI::Duration ans;
   ans.sec = lhs.sec + rhs.sec;

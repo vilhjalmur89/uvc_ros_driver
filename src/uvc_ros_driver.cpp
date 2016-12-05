@@ -172,6 +172,7 @@ void uvcROSDriver::initDevice()
 	// initialize imu msg publisher
 	imu0_publisher_.advertise("/cam_0_imu", nh_);
 	imu1_publisher_.advertise("/cam_1_imu", nh_);
+
 	// wait on heart beat
 	std::cout << "Waiting on device.";
 	fflush(stdout);
