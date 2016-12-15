@@ -41,6 +41,7 @@
  */
 
 #include "uvc_ros_driver.h"
+#include "opencv2/highgui/highgui.hpp"
 
 namespace uvc
 {
@@ -110,69 +111,77 @@ void uvcROSDriver::initDevice()
 	sp_ = Serial_Port("/dev/serial/by-id/usb-Cypress_FX3-if02", 115200);
 	sp_.open_serial();
 
+	// rmw_qos_profile_t custom_camera_qos_profile = rmw_qos_profile_services_default;
+	// custom_camera_qos_profile.depth = 10;
+	// custom_camera_qos_profile.reliability = RMW_QOS_POLICY_RELIABLE;
+	// // custom_camera_qos_profile.history = RMW_QOS_POLICY_HISTORY_KEEP_LAST;
+	// pub = nh_->create_publisher<sensor_msgs::msg::Image>(
+	//   "image", custom_camera_qos_profile);
+
 	// initialize camera image publisher
 	switch (n_cameras_) {
 	case 10:
-		cam_9_pub_.advertise(node_name_ + "/cam_9/image_raw", nh_);
-		cam_9_info_pub_.advertise(node_name_ + "/cam_9/camera_info", nh_);
+		cam_9_pub_.advertise(node_name_ + "_cam_9_image_raw", nh_);
+		cam_9_info_pub_.advertise(node_name_ + "_cam_9_camera_info", nh_);
 
 	case 9:
-		cam_8_pub_.advertise(node_name_ + "/cam_8/image_raw", nh_);
-		cam_8_info_pub_.advertise(node_name_ + "/cam_8/camera_info", nh_);
+		cam_8_pub_.advertise(node_name_ + "_cam_8_image_raw", nh_);
+		cam_8_info_pub_.advertise(node_name_ + "_cam_8_camera_info", nh_);
 
 	case 8:
-		cam_7_pub_.advertise(node_name_ + "/cam_7/image_raw", nh_);
-		cam_7_info_pub_.advertise(node_name_ + "/cam_7/camera_info", nh_);
-		cam_6c_pub_.advertise(node_name_ + "/cam_6/image_rect", nh_);
-		cam_6c_info_pub_.advertise(node_name_ + "/cam_6/camera_info", nh_);
-		cam_6d_pub_.advertise(node_name_ + "/cam_6/image_depth", nh_);
-		cam_6d_info_pub_.advertise(node_name_ + "/cam_6/camera_info", nh_);
+		cam_7_pub_.advertise(node_name_ + "_cam_7_image_raw", nh_);
+		cam_7_info_pub_.advertise(node_name_ + "_cam_7_camera_info", nh_);
+		cam_6c_pub_.advertise(node_name_ + "_cam_6_image_rect", nh_);
+		cam_6c_info_pub_.advertise(node_name_ + "_cam_6_camera_info", nh_);
+		cam_6d_pub_.advertise(node_name_ + "_cam_6_image_depth", nh_);
+		cam_6d_info_pub_.advertise(node_name_ + "_cam_6_camera_info", nh_);
 
 	case 7:
-		cam_6_pub_.advertise(node_name_ + "/cam_6/image_raw", nh_);
-		cam_6_info_pub_.advertise(node_name_ + "/cam_6/camera_info", nh_);
+		cam_6_pub_.advertise(node_name_ + "_cam_6_image_raw", nh_);
+		cam_6_info_pub_.advertise(node_name_ + "_cam_6_camera_info", nh_);
 
 	case 6:
-		cam_5_pub_.advertise(node_name_ + "/cam_5/image_raw", nh_);
-		cam_5_info_pub_.advertise(node_name_ + "/cam_5/camera_info", nh_);
-		cam_4c_pub_.advertise(node_name_ + "/cam_4/image_rect", nh_);
-		cam_4c_info_pub_.advertise(node_name_ + "/cam_4/camera_info", nh_);
-		cam_4d_pub_.advertise(node_name_ + "/cam_4/image_depth", nh_);
-		cam_4d_info_pub_.advertise(node_name_ + "/cam_4/camera_info", nh_);
+		cam_5_pub_.advertise(node_name_ + "_cam_5_image_raw", nh_);
+		cam_5_info_pub_.advertise(node_name_ + "_cam_5_camera_info", nh_);
+		cam_4c_pub_.advertise(node_name_ + "_cam_4_image_rect", nh_);
+		cam_4c_info_pub_.advertise(node_name_ + "_cam_4_camera_info", nh_);
+		cam_4d_pub_.advertise(node_name_ + "_cam_4_image_depth", nh_);
+		cam_4d_info_pub_.advertise(node_name_ + "_cam_4_camera_info", nh_);
 
 	case 5:
-		cam_4_pub_.advertise(node_name_ + "/cam_4/image_raw", nh_);
-		cam_4_info_pub_.advertise(node_name_ + "/cam_4/camera_info", nh_);
+		cam_4_pub_.advertise(node_name_ + "_cam_4_image_raw", nh_);
+		cam_4_info_pub_.advertise(node_name_ + "_cam_4_camera_info", nh_);
 
 	case 4:
-		cam_3_pub_.advertise(node_name_ + "/cam_3/image_raw", nh_);
-		cam_3_info_pub_.advertise(node_name_ + "/cam_3/camera_info", nh_);
-		cam_2c_pub_.advertise(node_name_ + "/cam_2/image_rect", nh_);
-		cam_2c_info_pub_.advertise(node_name_ + "/cam_2/camera_info", nh_);
-		cam_2d_pub_.advertise(node_name_ + "/cam_2/image_depth", nh_);
-		cam_2d_info_pub_.advertise(node_name_ + "/cam_2/camera_info", nh_);
+		cam_3_pub_.advertise(node_name_ + "_cam_3_image_raw", nh_);
+		cam_3_info_pub_.advertise(node_name_ + "_cam_3_camera_info", nh_);
+		cam_2c_pub_.advertise(node_name_ + "_cam_2_image_rect", nh_);
+		cam_2c_info_pub_.advertise(node_name_ + "_cam_2_camera_info", nh_);
+		cam_2d_pub_.advertise(node_name_ + "_cam_2_image_depth", nh_);
+		cam_2d_info_pub_.advertise(node_name_ + "_cam_2_camera_info", nh_);
 
 	case 3:
-		cam_2_pub_.advertise(node_name_ + "/cam_2/image_raw", nh_);
-		cam_2_info_pub_.advertise(node_name_ + "/cam_2/camera_info", nh_);
+		cam_2_pub_.advertise(node_name_ + "_cam_2_image_raw", nh_);
+		cam_2_info_pub_.advertise(node_name_ + "_cam_2_camera_info", nh_);
 
 	case 2:
-		cam_1_pub_.advertise(node_name_ + "/cam_1/image_raw", nh_);
-		cam_1_info_pub_.advertise(node_name_ + "/cam_1/camera_info", nh_);
-		cam_0c_pub_.advertise(node_name_ + "/cam_0/image_rect", nh_);
-		cam_0c_info_pub_.advertise(node_name_ + "/cam_0/camera_info", nh_);
-		cam_0d_pub_.advertise(node_name_ + "/cam_0/image_depth", nh_);
-		cam_0d_info_pub_.advertise(node_name_ + "/cam_0/camera_info", nh_);
+		cam_1_pub_.advertise(node_name_ + "_cam_1_image_raw", nh_);
+		cam_1_info_pub_.advertise(node_name_ + "_cam_1_camera_info", nh_);
+		cam_0c_pub_.advertise(node_name_ + "_cam_0_image_rect", nh_);
+		cam_0c_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_);
+		cam_0d_pub_.advertise(node_name_ + "_cam_0_image_depth", nh_);
+		cam_0d_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_);
 
 	default:
-		cam_0_pub_.advertise(node_name_ + "/cam_0/image_raw", nh_);
-		cam_0_info_pub_.advertise(node_name_ + "/cam_0/camera_info", nh_);
+		auto x = 4;
+		cam_0_pub_.advertise("image", nh_, "camera");
+		// cam_0_pub_.advertise("uvc_ros_driver_image_raw2", nh_, "camera");
+		// cam_0_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_);
 	}
 
 	// initialize imu msg publisher
-	imu0_publisher_.advertise("/cam_0_imu", nh_);
-	imu1_publisher_.advertise("/cam_1_imu", nh_);
-
+	// imu0_publisher_.advertise("_cam_0_imu", nh_);
+	// imu1_publisher_.advertise("_cam_1_imu", nh_);
 	// wait on heart beat
 	std::cout << "Waiting on device.";
 	fflush(stdout);
@@ -886,9 +895,9 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 			msg_vio.imu.push_back(msg_imu);
 
 			if (imu_id == 1){
-				imu1_publisher_.publish(msg_imu);
+				// imu1_publisher_.publish(msg_imu);
 			} else {
-				imu0_publisher_.publish(msg_imu);
+				// imu0_publisher_.publish(msg_imu);
 			}
 
 			++imu_msg_counter_in_frame;
@@ -952,8 +961,21 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 
 		if (frameCounter_ % modulo_ == 0) {
 			// publish images and camera info
-			cam_0_pub_.publish(msg_vio.left_image);
-			cam_1_pub_.publish(msg_vio.right_image);
+			auto img = std::make_shared<sensor_msgs::Image>(msg_vio.left_image);
+			cam_0_pub_.publishPointer(img);
+
+	    
+	    // cv::Mat frame(
+	    //   img->height, img->width, encoding2mat_type(img->encoding),
+	    //   const_cast<unsigned char *>(img->data.data()), img->step);
+	    // CvMat cvframe = frame;
+	    // cvShowImage("showimage", &cvframe);
+	    // // Draw the screen and wait for 1 millisecond.
+	    // cv::waitKey(1);
+
+
+			// cam_0_pub_.publishPointer(img);
+			// cam_1_pub_.publish(msg_vio.right_image);
 
 			// set camera info header
 			setCameraInfoHeader(info_cam_0_, width_, height_, frame_time_,
@@ -961,8 +983,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 			setCameraInfoHeader(info_cam_1_, width_, height_, frame_time_,
 					    "cam_1_optical_frame");
 			// publish camera info
-			cam_0_info_pub_.publish(info_cam_0_);
-			cam_1_info_pub_.publish(info_cam_1_);
+			// cam_0_info_pub_.publish(info_cam_0_);
+			// cam_1_info_pub_.publish(info_cam_1_);
 		}
 	}
 
@@ -977,8 +999,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		msg_vio.right_image.header.frame_id = "cam_0_disparity_frame";
 
 		// publish images
-		cam_0c_pub_.publish(msg_vio.left_image);
-		cam_0d_pub_.publish(msg_vio.right_image);
+		// cam_0c_pub_.publish(msg_vio.left_image);
+		// cam_0d_pub_.publish(msg_vio.right_image);
 
 		// set camera info header
 		setCameraInfoHeader(info_cam_2_, width_, height_, frame_time_,
@@ -986,8 +1008,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		setCameraInfoHeader(info_cam_3_, width_, height_, frame_time_,
 				    "cam_3_optical_frame");
 		// publish camera info
-		cam_0c_info_pub_.publish(info_cam_0_);
-		cam_0d_info_pub_.publish(info_cam_1_);
+		// cam_0c_info_pub_.publish(info_cam_0_);
+		// cam_0d_info_pub_.publish(info_cam_1_);
 	}
 
 	if (cam_id == 1 && frameCounter_ % modulo_ == 0) {  // select_cam = 2 + 3
@@ -1001,8 +1023,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		msg_vio.right_image.header.frame_id = "cam_3_optical_frame";
 
 		// publish images
-		cam_2_pub_.publish(msg_vio.left_image);
-		cam_3_pub_.publish(msg_vio.right_image);
+		// cam_2_pub_.publish(msg_vio.left_image);
+		// cam_3_pub_.publish(msg_vio.right_image);
 
 		// set camera info header
 		setCameraInfoHeader(info_cam_2_, width_, height_, frame_time_,
@@ -1010,8 +1032,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		setCameraInfoHeader(info_cam_3_, width_, height_, frame_time_,
 				    "cam_3_optical_frame");
 		// publish camera info
-		cam_2_info_pub_.publish(info_cam_2_);
-		cam_3_info_pub_.publish(info_cam_3_);
+		// cam_2_info_pub_.publish(info_cam_2_);
+		// cam_3_info_pub_.publish(info_cam_3_);
 	}
 
 	if (cam_id == 9 && frameCounter_ % modulo_ == 0) {  // select_cam = 2 + 3
@@ -1025,8 +1047,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		msg_vio.right_image.header.frame_id = "cam_2_disparity_frame";
 
 		// publish images
-		cam_2c_pub_.publish(msg_vio.left_image);
-		cam_2d_pub_.publish(msg_vio.right_image);
+		// cam_2c_pub_.publish(msg_vio.left_image);
+		// cam_2d_pub_.publish(msg_vio.right_image);
 
 		// set camera info header
 		setCameraInfoHeader(info_cam_2_, width_, height_, frame_time_,
@@ -1034,8 +1056,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		setCameraInfoHeader(info_cam_3_, width_, height_, frame_time_,
 				    "cam_3_optical_frame");
 		// publish camera info
-		cam_2c_info_pub_.publish(info_cam_2_);
-		cam_2d_info_pub_.publish(info_cam_3_);
+		// cam_2c_info_pub_.publish(info_cam_2_);
+		// cam_2d_info_pub_.publish(info_cam_3_);
 	}
 
 	if (cam_id == 2 && frameCounter_ % modulo_ == 0) {  // select_cam = 4 + 5
@@ -1047,8 +1069,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		msg_vio.right_image.header.frame_id = "cam_5_optical_frame";
 
 		// publish images
-		cam_4_pub_.publish(msg_vio.left_image);
-		cam_5_pub_.publish(msg_vio.right_image);
+		// cam_4_pub_.publish(msg_vio.left_image);
+		// cam_5_pub_.publish(msg_vio.right_image);
 
 		// set camera info header
 		setCameraInfoHeader(info_cam_4_, width_, height_, frame_time_,
@@ -1056,8 +1078,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		setCameraInfoHeader(info_cam_5_, width_, height_, frame_time_,
 				    "cam_5_optical_frame");
 		// publish camera info
-		cam_4_info_pub_.publish(info_cam_4_);
-		cam_5_info_pub_.publish(info_cam_5_);
+		// cam_4_info_pub_.publish(info_cam_4_);
+		// cam_5_info_pub_.publish(info_cam_5_);
 	}
 
 	if (cam_id == 10 && frameCounter_ % modulo_ == 0) {  // select_cam = 2 + 3
@@ -1071,8 +1093,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		msg_vio.right_image.header.frame_id = "cam_4_disparity_frame";
 
 		// publish images
-		cam_4c_pub_.publish(msg_vio.left_image);
-		cam_4d_pub_.publish(msg_vio.right_image);
+		// cam_4c_pub_.publish(msg_vio.left_image);
+		// cam_4d_pub_.publish(msg_vio.right_image);
 
 		// set camera info header
 		setCameraInfoHeader(info_cam_4_, width_, height_, frame_time_,
@@ -1080,8 +1102,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		setCameraInfoHeader(info_cam_5_, width_, height_, frame_time_,
 				    "cam_4_optical_frame");
 		// publish camera info
-		cam_4c_info_pub_.publish(info_cam_2_);
-		cam_4d_info_pub_.publish(info_cam_3_);
+		// cam_4c_info_pub_.publish(info_cam_2_);
+		// cam_4d_info_pub_.publish(info_cam_3_);
 	}
 
 	if (cam_id == 3 && frameCounter_ % modulo_ == 0) {  // select_cam = 6 + 7
@@ -1093,8 +1115,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		msg_vio.right_image.header.frame_id = "cam_7_optical_frame";
 
 		// publish images
-		cam_6_pub_.publish(msg_vio.left_image);
-		cam_7_pub_.publish(msg_vio.right_image);
+		// cam_6_pub_.publish(msg_vio.left_image);
+		// cam_7_pub_.publish(msg_vio.right_image);
 
 		// set camera info header
 		setCameraInfoHeader(info_cam_6_, width_, height_, frame_time_,
@@ -1102,8 +1124,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		setCameraInfoHeader(info_cam_7_, width_, height_, frame_time_,
 				    "cam_7_optical_frame");
 		// publish camera info
-		cam_6_info_pub_.publish(info_cam_6_);
-		cam_7_info_pub_.publish(info_cam_7_);
+		// cam_6_info_pub_.publish(info_cam_6_);
+		// cam_7_info_pub_.publish(info_cam_7_);
 	}
 
 	if (cam_id == 11 && frameCounter_ % modulo_ == 0) {  // select_cam = 2 + 3
@@ -1117,8 +1139,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		msg_vio.right_image.header.frame_id = "cam_6_disparity_frame";
 
 		// publish images
-		cam_6c_pub_.publish(msg_vio.left_image);
-		cam_6d_pub_.publish(msg_vio.right_image);
+		// cam_6c_pub_.publish(msg_vio.left_image);
+		// cam_6d_pub_.publish(msg_vio.right_image);
 
 		// set camera info header
 		setCameraInfoHeader(info_cam_2_, width_, height_, frame_time_,
@@ -1126,8 +1148,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		setCameraInfoHeader(info_cam_3_, width_, height_, frame_time_,
 				    "cam_3_optical_frame");
 		// publish camera info
-		cam_6c_info_pub_.publish(info_cam_2_);
-		cam_6d_info_pub_.publish(info_cam_3_);
+		// cam_6c_info_pub_.publish(info_cam_2_);
+		// cam_6d_info_pub_.publish(info_cam_3_);
 	}
 
 	if (cam_id == 4 && frameCounter_ % modulo_ == 0) {  // select_cam = 8 + 9
@@ -1139,8 +1161,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		msg_vio.right_image.header.frame_id = "cam_9_optical_frame";
 
 		// publish images
-		cam_8_pub_.publish(msg_vio.left_image);
-		cam_9_pub_.publish(msg_vio.right_image);
+		// cam_8_pub_.publish(msg_vio.left_image);
+		// cam_9_pub_.publish(msg_vio.right_image);
 
 		// set camera info header
 		setCameraInfoHeader(info_cam_8_, width_, height_, frame_time_,
@@ -1148,8 +1170,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		setCameraInfoHeader(info_cam_9_, width_, height_, frame_time_,
 				    "cam_9_optical_frame");
 		// publish camera info
-		cam_8_info_pub_.publish(info_cam_8_);
-		cam_9_info_pub_.publish(info_cam_9_);
+		// cam_8_info_pub_.publish(info_cam_8_);
+		// cam_9_info_pub_.publish(info_cam_9_);
 	}
 
 

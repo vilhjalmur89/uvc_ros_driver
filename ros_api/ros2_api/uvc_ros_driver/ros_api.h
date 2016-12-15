@@ -161,6 +161,7 @@ class Subscriber {
 // }
 
 
+
 template <class MsgType>
 class Publisher {
  public:
@@ -177,6 +178,10 @@ class Publisher {
     else if (profile_name == "default") {
       publisher_ = node->create_publisher<MsgType>(topic, rmw_qos_profile_default);
     }
+    else if (profile_name == "camera") {
+      publisher_ = node->create_publisher<MsgType>(topic, rmw_qos_profile_services_default);
+      printf("camera profile\n\n\n\n\n\n");
+    }
     else {
       ROS_INFO("Unknown QoS profile");
       throw std::invalid_argument("Unknown QoS profile");
@@ -184,6 +189,11 @@ class Publisher {
   }
 
   void publish(const MsgType & msg) {
+    auto shared_msg = std::make_shared<MsgType>(msg);
+    publishPointer(shared_msg);
+  }
+  void publishPointer(std::shared_ptr<MsgType> & msg) {
+    printf("Publish\n");
     publisher_->publish(msg);
   }
 
@@ -192,6 +202,8 @@ class Publisher {
 
 }
 
+
+// TODO: Implement or use std::chrono
 inline RosAPI::Duration operator+(const RosAPI::Duration & lhs, const RosAPI::Duration & rhs) {
   RosAPI::Duration ans;
   ans.sec = lhs.sec + rhs.sec;

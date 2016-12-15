@@ -120,6 +120,7 @@ private:
 	RosAPI::Time start_offset_;
 	uint32_t time_wrapper_check_frame_ = 0.0;
 	uint32_t time_wrapper_check_line_ = 0.0;
+
 	// image publishers
 	RosAPI::Publisher<sensor_msgs::Image> cam_0_pub_;
 	RosAPI::Publisher<sensor_msgs::CameraInfo> cam_0_info_pub_;
@@ -301,7 +302,7 @@ public:
 
 		// update modulo_ variable also
 		if (calibration_mode != 0) {
-			modulo_ = 12;
+			modulo_ = 8;
 		}
 	};
 };

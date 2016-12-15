@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 	RosAPI::init(argc, argv, "uvc_camera");
 
 	auto nh = std::make_shared<RosAPI::Node>("~");
-	uvc::uvcROSDriver uvc_ros_driver(nh.get(), "/uvc_ros_driver");
+	uvc::uvcROSDriver uvc_ros_driver(nh.get(), "uvc_ros_driver");
 
 	// get params from launch file
 	bool flip, set_calibration, depth_map, calibration_mode, ait_msgs;
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 	RosAPI::getParamWithDefault(nh.get(), "setCalibration", set_calibration, false);
 	RosAPI::getParamWithDefault(nh.get(), "depthMap", depth_map, false);
 	RosAPI::getParamWithDefault(nh.get(), "cameraConfigFile", calibration_file_path, std::string(""));
-	RosAPI::getParamWithDefault(nh.get(), "calibrationMode", calibration_mode, false);
+	RosAPI::getParamWithDefault(nh.get(), "calibrationMode", calibration_mode, true);
 
 	// read yaml calibration file from device
 	CameraParameters camParams =
