@@ -46,6 +46,23 @@
 namespace uvc
 {
 
+int encoding2mat_type(const std::string & encoding)
+{
+  if (encoding == "mono8") {
+    return CV_8UC1;
+  } else if (encoding == "bgr8") {
+    return CV_8UC3;
+  } else if (encoding == "mono16") {
+    return CV_16SC1;
+  } else if (encoding == "rgba8") {
+    return CV_8UC4;
+  } else if (encoding == "32FC1") {
+    return CV_32FC1;
+  } else {
+    throw std::runtime_error("Unsupported encoding type");
+  }
+}
+
 static void callback(uvc_frame *frame, void *arg)
 {
 	uvcROSDriver *obj = (uvcROSDriver *)arg;
@@ -111,14 +128,8 @@ void uvcROSDriver::initDevice()
 	sp_ = Serial_Port("/dev/serial/by-id/usb-Cypress_FX3-if02", 115200);
 	sp_.open_serial();
 
-	// rmw_qos_profile_t custom_camera_qos_profile = rmw_qos_profile_services_default;
-	// custom_camera_qos_profile.depth = 10;
-	// custom_camera_qos_profile.reliability = RMW_QOS_POLICY_RELIABLE;
-	// // custom_camera_qos_profile.history = RMW_QOS_POLICY_HISTORY_KEEP_LAST;
-	// pub = nh_->create_publisher<sensor_msgs::msg::Image>(
-	//   "image", custom_camera_qos_profile);
-
 	// initialize camera image publisher
+
 	switch (n_cameras_) {
 	case 10:
 		cam_9_pub_.advertise(node_name_ + "_cam_9_image_raw", nh_);
@@ -165,7 +176,7 @@ void uvcROSDriver::initDevice()
 		cam_2_info_pub_.advertise(node_name_ + "_cam_2_camera_info", nh_);
 
 	case 2:
-		cam_1_pub_.advertise(node_name_ + "_cam_1_image_raw", nh_);
+		cam_1_pub_.advertise(node_name_ + "_cam_1_image_raw", nh_, "camera");
 		cam_1_info_pub_.advertise(node_name_ + "_cam_1_camera_info", nh_);
 		cam_0c_pub_.advertise(node_name_ + "_cam_0_image_rect", nh_);
 		cam_0c_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_);
@@ -173,10 +184,9 @@ void uvcROSDriver::initDevice()
 		cam_0d_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_);
 
 	default:
-		auto x = 4;
 		cam_0_pub_.advertise("image", nh_, "camera");
-		// cam_0_pub_.advertise("uvc_ros_driver_image_raw2", nh_, "camera");
-		// cam_0_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_);
+		// cam_0_pub_.advertise("uvc_ros_driver_image_raw", nh_, "camera");
+		cam_0_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_, "default");
 	}
 
 	// initialize imu msg publisher
@@ -961,21 +971,21 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 
 		if (frameCounter_ % modulo_ == 0) {
 			// publish images and camera info
-			auto img = std::make_shared<sensor_msgs::Image>(msg_vio.left_image);
-			cam_0_pub_.publishPointer(img);
+			// auto img = std::make_shared<sensor_msgs::Image>(msg_vio.left_image);
+			// cam_0_pub_.publishPointer(img);
 
 	    
-	    // cv::Mat frame(
-	    //   img->height, img->width, encoding2mat_type(img->encoding),
-	    //   const_cast<unsigned char *>(img->data.data()), img->step);
-	    // CvMat cvframe = frame;
-	    // cvShowImage("showimage", &cvframe);
-	    // // Draw the screen and wait for 1 millisecond.
-	    // cv::waitKey(1);
+		    // cv::Mat frame(
+		    //   img->height, img->width, encoding2mat_type(img->encoding),
+		    //   const_cast<unsigned char *>(img->data.data()), img->step);
+		    // CvMat cvframe = frame;
+		    // cvShowImage("showimage", &cvframe);
+		    // // Draw the screen and wait for 1 millisecond.
+		    // cv::waitKey(1);
 
 
-			// cam_0_pub_.publishPointer(img);
-			// cam_1_pub_.publish(msg_vio.right_image);
+			cam_0_pub_.publish(msg_vio.left_image);
+			cam_1_pub_.publish(msg_vio.right_image);
 
 			// set camera info header
 			setCameraInfoHeader(info_cam_0_, width_, height_, frame_time_,

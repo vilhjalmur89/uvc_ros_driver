@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 	std::string calibration_file_path;
 	// TODO: check if parameter exist
 	RosAPI::getParamWithDefault(nh.get(), "flip", flip, false);
-	RosAPI::getParamWithDefault(nh.get(), "numberOfCameras", number_of_cameras, 0);
+	RosAPI::getParamWithDefault(nh.get(), "numberOfCameras", number_of_cameras, 2);
 	RosAPI::getParamWithDefault(nh.get(), "AITMsgs", ait_msgs, false);
 	RosAPI::getParamWithDefault(nh.get(), "setCalibration", set_calibration, false);
 	RosAPI::getParamWithDefault(nh.get(), "depthMap", depth_map, false);
