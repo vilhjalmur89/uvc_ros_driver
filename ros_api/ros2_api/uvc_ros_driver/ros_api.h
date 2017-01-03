@@ -172,6 +172,7 @@ class Publisher {
   }
 
   void advertise(const std::string & topic, RosAPI::Node * node, std::string profile_name = "sensor") {
+    printf("Advertised %s \n", topic.c_str());
     if (profile_name == "sensor") {
       publisher_ = node->create_publisher<MsgType>(topic, rmw_qos_profile_sensor_data);
     }

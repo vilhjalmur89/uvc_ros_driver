@@ -39,6 +39,7 @@
  */
 
 #include "uvc_ros_driver.h"
+#include "opencv2/highgui/highgui.hpp"
 
 // declare helper function
 CameraParameters loadCustomCameraCalibration(const std::string calib_path)
@@ -65,6 +66,7 @@ CameraParameters loadCustomCameraCalibration(const std::string calib_path)
 
 	return cp;
 }
+
 
 int main(int argc, char **argv)
 {
@@ -121,7 +123,39 @@ int main(int argc, char **argv)
 	uvc_ros_driver.initDevice();
 	// start device
 	uvc_ros_driver.startDevice();
-	// endless loop
-	RosAPI::spin(nh);
+	
+
+
+	cvNamedWindow("showimage", CV_WINDOW_AUTOSIZE);
+	auto node = rclcpp::node::Node::make_shared("showimage");
+	auto callback = [](const sensor_msgs::msg::Image::SharedPtr msg)
+	{
+		cv::Mat frame(
+	      msg->height, msg->width, CV_8UC1,
+	      const_cast<unsigned char *>(msg->data.data()), msg->step);
+	    CvMat cvframe = frame;
+	    cvShowImage("showimage", &cvframe);
+	    // Draw the screen and wait for 1 millisecond.
+	    cv::waitKey(1);
+	};
+	// Initialize a subscriber that will receive the ROS Image message to be displayed.
+	auto sub = node->create_subscription<sensor_msgs::msg::Image>(
+	"image", callback, rmw_qos_profile_services_default);
+
+
+	rclcpp::executors::SingleThreadedExecutor executor;
+	executor.add_node(nh);
+	executor.add_node(node);
+	executor.spin();
+
+	// while (rclcpp::ok()) {
+	// 	RosAPI::spin_some(node);
+	// 	RosAPI::spin_some(nh);
+	// }
+
+	// rclcpp::spin(node);
+
+	// // endless loop
+	// RosAPI::spin(nh);
 	return 0;
 }

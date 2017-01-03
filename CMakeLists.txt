@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(uvc_ros_driver)
 
 if(NOT WIN32)
@@ -17,7 +17,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
 find_package(example_interfaces REQUIRED)
-find_package(rclc REQUIRED)
+# find_package(rclc REQUIRED)
 find_package(rcl REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rmw REQUIRED)
