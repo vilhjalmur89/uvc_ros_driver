@@ -39,8 +39,8 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -Wall -std=c++0x -D__STRIC
 
 include_directories(
   include
-  include/ros_api/ros2_api
-  include/ros_api_extend/ros2_api_extend
+  include/ros_api/ros2
+  include/ros_api_extend/ros2
   /usr/include/libusb-1.0
   src/nodes/c_library
   src/nodes
