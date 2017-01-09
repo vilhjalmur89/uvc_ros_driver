@@ -181,7 +181,8 @@ class Publisher {
     }
     else if (profile_name == "camera") {
       publisher_ = node->create_publisher<MsgType>(topic, rmw_qos_profile_services_default);
-      printf("camera profile\n\n\n\n\n\n");
+      // publisher_ = node->create_publisher<MsgType>(topic, rmw_qos_profile_sensor_data);
+      // printf("camera profile\n\n\n\n\n\n");
     }
     else {
       ROS_INFO("Unknown QoS profile");

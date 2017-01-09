@@ -177,16 +177,17 @@ void uvcROSDriver::initDevice()
 
 	case 2:
 		cam_1_pub_.advertise(node_name_ + "_cam_1_image_raw", nh_, "camera");
-		cam_1_info_pub_.advertise(node_name_ + "_cam_1_camera_info", nh_);
-		cam_0c_pub_.advertise(node_name_ + "_cam_0_image_rect", nh_);
-		cam_0c_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_);
-		cam_0d_pub_.advertise(node_name_ + "_cam_0_image_depth", nh_);
-		cam_0d_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_);
+		cam_1_info_pub_.advertise(node_name_ + "_cam_1_camera_info", nh_, "camera");
+		cam_0c_pub_.advertise(node_name_ + "_cam_0_image_rect", nh_, "camera");
+		cam_0c_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_, "camera");
+		cam_0d_pub_.advertise("image", nh_, "camera");
+		// cam_0d_pub_.advertise(node_name_ + "_cam_0_image_depth", nh_, "camera");
+		cam_0d_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_, "camera");
 
 	default:
-		cam_0_pub_.advertise("image", nh_, "camera");
-		// cam_0_pub_.advertise("uvc_ros_driver_image_raw", nh_, "camera");
-		cam_0_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_, "default");
+		// cam_0_pub_.advertise("image", nh_, "camera");
+		cam_0_pub_.advertise("uvc_ros_driver_image_raw", nh_, "camera");
+		cam_0_info_pub_.advertise(node_name_ + "_cam_0_camera_info", nh_, "camera");
 	}
 
 	// initialize imu msg publisher
@@ -1009,8 +1010,8 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		msg_vio.right_image.header.frame_id = "cam_0_disparity_frame";
 
 		// publish images
-		// cam_0c_pub_.publish(msg_vio.left_image);
-		// cam_0d_pub_.publish(msg_vio.right_image);
+		cam_0c_pub_.publish(msg_vio.left_image);
+		cam_0d_pub_.publish(msg_vio.right_image);
 
 		// set camera info header
 		setCameraInfoHeader(info_cam_2_, width_, height_, frame_time_,
