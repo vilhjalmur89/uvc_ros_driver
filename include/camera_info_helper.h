@@ -2,7 +2,8 @@
 #define __CAMERA_INFO_HELPER_H__
 
 #include "fpga_calibration.h"
-#include "ros_api.h"
+#include <ros_api/ros_api.h>
+#include <ros_api_extend/ros_api_extend.h>
 
 #include <string>
 

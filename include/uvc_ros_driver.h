@@ -56,12 +56,12 @@
 
 #include "libuvc/libuvc.h"
 
-#include "ros_api.h"
-
 #include <vector>
 #include <utility>  // std::pair
 #include <string>
 #include <algorithm>
+
+#include <ros_api/ros_api.h>
 
 namespace uvc
 {
